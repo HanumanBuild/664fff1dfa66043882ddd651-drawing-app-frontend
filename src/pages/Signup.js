@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 
 const Signup = () => {
   const [username, setUsername] = useState('');
@@ -9,8 +10,15 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add signup logic here
-    history.push('/login');
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_DRAWING_APP_BACKEND_URL}/api/auth/register`,
+        { username, email, password }
+      );
+      history.push('/login');
+    } catch (error) {
+      console.error('Error signing up:', error);
+    }
   };
 
   return (

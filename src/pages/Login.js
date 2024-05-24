@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -8,8 +9,16 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add login logic here
-    history.push('/dashboard');
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_DRAWING_APP_BACKEND_URL}/api/auth/login`,
+        { email, password }
+      );
+      localStorage.setItem('token', response.data.token);
+      history.push('/dashboard');
+    } catch (error) {
+      console.error('Error logging in:', error);
+    }
   };
 
   return (
